@@ -1,1 +1,0 @@
-{"name":"Local: C_Tenzing_and_Balls","url":"/Users/kaushandey/Documents/code/C_Tenzing_and_Balls.cpp","tests":[{"id":1704260771841,"input":"2\n5\n1 2 2 3 3\n4\n1 2 1 2","output":"4\n3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/kaushandey/Documents/code/C_Tenzing_and_Balls.cpp","group":"local","local":true}
