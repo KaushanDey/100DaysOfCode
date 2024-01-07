@@ -12,11 +12,5 @@ ll gcd(ll a, ll b)
 }
 int main()
 {
-    fastio;
-    ll t=1;
-    cin>>t;
-    while(t--)
-    {
-        
-    }
+    
 }
