@@ -4,43 +4,31 @@ typedef long long ll;
 typedef long double ld;
 #define fastio ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
 
-void maxSum(vector<ll> &a, ll &n, ll &x, ll k){
+ll maxSum(vector<ll> &arr, ll n, ll k)
+{
+    // k must be smaller than n
+    if (n < k)
+    {
+       cout << "Invalid";
+       return -1;
+    }
+ 
+    // Compute sum of first window of size k
+    ll res = 0;
+    for (ll i=0; i<k; i++)
+       res += arr[i];
 
-    ll sum=0;
-    ll Max=INT_MIN;
-    ll cnt=0;
-    for(ll i=0;i<n;i++){
-        if(cnt<k){
-            if(a[i]+x<0){
-                Max = max(Max,sum);
-                sum=0;
-                cnt=0;
-            }else{
-                sum+=a[i]+x;
-                cnt++;
-            }
-        }
-        else{
-            if(a[i]<0){
-                Max=max(Max,sum);
-                sum=0;
-                cnt=0;
-                if(cnt<k && a[i]+x>=0) {
-                    sum+=a[i]+x;
-                    cnt++;
-                }
-            }else{
-                sum+=a[i];
-            }
-        }
+    ll curr_sum = res;
+    for (ll i=k; i<n; i++)
+    {
+       curr_sum += arr[i] - arr[i-k];
+       res = max(res, curr_sum);
     }
-    Max = max(Max,sum);
-    if(k==n){
-        cout<<Max<<"\n";
-        return;
-    }
-    cout<<Max<<" ";
+ 
+    return res;
 }
+
+
 
 int main()
 {
@@ -52,7 +40,18 @@ int main()
         ll n,x;
         cin>>n>>x;
         vector<ll> a(n);
+        vector<ll> Sum(n+1);
         for(ll i=0;i<n;i++) cin>>a[i];
-        for(ll k=0;k<=n;k++) maxSum(a,n,x,k);
+        for(ll i=1;i<=n;i++){
+            Sum[i]=maxSum(a,n,i);
+        }
+        for(ll k=0;k<=n;k++){
+            ll maxi = INT_MIN;
+            for(ll i=0;i<=n;i++){
+                maxi=max(maxi,Sum[i]+(min(i,k)*x));
+            }
+            cout<<maxi<<" ";
+        }
+        cout<<"\n";
     }
 }
