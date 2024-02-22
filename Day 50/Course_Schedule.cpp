@@ -20,6 +20,7 @@ bool possibility(vector<vector<ll>> &adj, vector<ll> &color,ll i, ll &n, ll &m){
     color[i]=2;
     return isPossible;
 }
+
 void topoSort(vector<vector<ll>> &adj, vector<ll> &in_deg,ll &n, ll &m){
 
     queue<ll> q;
