@@ -24,6 +24,7 @@ int main()
         edges[i] = {u,v,w};
     }
     vector<ll> dis(n,INT_MAX);
+    dis[0] = 0;
     for(ll i=0;i<n;i++){
         for(auto it:edges){
             ll u = it.u;
