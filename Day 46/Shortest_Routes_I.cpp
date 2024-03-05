@@ -7,17 +7,12 @@ typedef long double ld;
 #define max3(a,b,c) max(max(a,b),c)
 #define max4(a,b,c,d) max(max(a,b),max(c,d))
 #define fr(i,n) for(ll i=0;i<n;i++)
-ll gcd(ll a, ll b)
-{
-    return b==0?a:gcd(b,a%b);
-}
 
-priority_queue<pair<ll,ll>,vector<pair<ll,ll>>, greater<pair<ll,ll>>> pq;
-vector<ll> dis;
-void shortestPath(vector<vector<pair<ll,ll>>> &adj){
-dis[1]=0;
+void shortestPath(vector<vector<pair<ll,ll>>> &adj, vector<ll> &dis){
+
+    priority_queue<pair<ll,ll>, vector<pair<ll,ll>>, greater<pair<ll,ll>>> pq;
+    dis[1]=0;
     pq.push({0,1});
-
     while(!pq.empty()){
         pair<ll,ll> p = pq.top();
         pq.pop();
@@ -39,13 +34,13 @@ int main()
     ll n,m;
     cin>>n>>m;
     vector<vector<pair<ll,ll>>> adj(n+1);
-    for(ll i=1;i<=n;i++){
+    for(ll i=0;i<m;i++){
         ll x,y,z;
         cin>>x>>y>>z;
         adj[x].push_back({y,z});
     }
-    dis.assign(n+1, INT_MAX);
-    shortestPath(adj);
+    vector<ll> dis(n+1,LLONG_MAX);
+    shortestPath(adj,dis);
     for(ll i=1;i<=n;i++){
         cout<<dis[i]<<" ";
     }
