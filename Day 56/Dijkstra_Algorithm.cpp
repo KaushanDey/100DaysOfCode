@@ -32,6 +32,7 @@ int main()
         pair<ll,ll> top = pq.top();
         pq.pop();
         ll u = top.second;
+        //check for stale node
         if(top.first>dis[u]) continue;
         for(ll i=0;i<n;i++){
             if(adj[u][i]!=0){
