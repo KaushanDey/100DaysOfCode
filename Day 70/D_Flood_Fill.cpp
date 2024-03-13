@@ -63,7 +63,7 @@ ll solve(ll l,ll r, vector<ll> &num, vector<vector<ll>> &dp){
 
     if(l>=r) return 0;
     if(dp[l][r]!=-1) return dp[l][r];
-    if(num[l]==num[r]) return dp[l][r] = 1+solve(l-1,r-1,num,dp);
+    if(num[l]==num[r]) return dp[l][r] = 1+solve(l+1,r-1,num,dp);
     return dp[l][r] = 1+min(solve(l,r-1,num,dp),solve(l+1,r,num,dp));
 
 }
@@ -87,7 +87,6 @@ int main()
         num.pb(a[i]);
     }
     ll m = num.size();
-
     vector<vector<ll>> dp(m,vector<ll> (m,-1));
     cout<<solve(0,m-1,num,dp);
 }
