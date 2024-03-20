@@ -60,50 +60,25 @@ void smallestPrimeFactor()
         }
     }
 }
-
-void dfs1(vvpll &adj, ll &b,ll node, ll parent,ll x, set<ll> &s){
-
-    if(node==b) return;
-    s.insert(x);
-    for(auto &child: adj[node]){
-        ll v = child.first;
-        ll w = child.second;
-        if(v!=parent){
-            dfs1(adj,b,v,node,x^w,s);
-        }
-    }
-}
-
-bool dfs2(vvpll &adj,ll &b, ll node, ll parent, ll x, set<ll> &s){
-
-    if(node!=b && s.count(x)) return true;
-
-    for(auto &child: adj[node]){
-        ll v = child.first;
-        ll w = child.second;
-        if(v!=parent){
-            if(dfs2(adj,b,v,node,x^w,s)) return true;
-        }
-    }
-    return false;
-}
 int main()
 {
     fastio;
     Tc
     {
-        ll n,a,b;
-        cin>>n>>a>>b;
-        vvpll adj(n+1);
-        for0(i,0,n-1){
-            ll u,v,w;
-            cin>>u>>v>>w;
-            adj[u].pb({v,w});
-            adj[v].pb({u,w});
+        ll n;
+        cin>>n;
+        ll sum = 0;
+        if(n%2==0){
+            
+            for(ll i=0;i<n;i+=2){
+                sum+=13;
+            }
+        }else{
+            for(ll i=0;i<n-1;i+=2){
+                sum+=13;
+            }
+            sum+=6;
         }
-        set<ll> s;
-        dfs1(adj,b,a,-1,0ll,s);
-       if(dfs2(adj,b,b,-1,0ll,s)) cout<<"YES\n";
-       else cout<<"NO\n";
+        cout<<sum<<"\n";
     }
 }
