@@ -86,22 +86,18 @@ void dfs2(vvll &adj2, ll node, vbool &vis, vll &components, vll &newNode, ll &id
     }
 }
 
-void dfs3(vvll &adj, vll &cost, ll node, vbool &vis2, ll output, vll &ans){
+ll dfs3(vvll &adj, vll &cost, ll node, vbool &vis2,vll &dp){
 
     vis2[node] = 1;
-    bool isLeaf = true;
-    output+=cost[node];
-
+    if(dp[node]!=-1) return dp[node];
+    ll sum = cost[node];
     for(auto &child: adj[node]){
-        isLeaf = false;
-        dfs3(adj,cost,child,vis2,output,ans);
+        sum = max(sum,cost[node]+dfs3(adj,cost,child,vis2,dp));
     }
-    if(isLeaf) ans.pb(output);
+    return dp[node] = sum;
     
 }
-bool Compare(ll a,ll b){
-    return (a>b);
-}
+
 int main()
 {
     fastio;
@@ -166,12 +162,12 @@ int main()
             }
         }
         vbool vis2(n1+1,false);
-        vll ans;
+        vll dp(n1+1,-1);
+        ll maxi = 0;
         for1(i,1,n1){
             if(!vis2[i]){
-                dfs3(adj,cost,i,vis2,0,ans);
+                maxi = max(maxi,dfs3(adj,cost,i,vis2,dp));
             }
         }
-        sort(ans.begin(),ans.end(),Compare);
-        cout<<ans[0];
+        cout<<maxi;
 }
