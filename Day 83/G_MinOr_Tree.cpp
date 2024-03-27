@@ -1,120 +1,82 @@
 #include <bits/stdc++.h>
+
+#define int long long
+#define mp make_pair
+#define x first
+#define y second
+#define all(a) (a).begin(), (a).end()
+#define rall(a) (a).rbegin(), (a).rend()
+
+typedef long double ld;
+typedef long long ll;
+
 using namespace std;
-#define ll long long
-#define fastio ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);cin.exceptions(ios::badbit | ios::failbit);
-#define all(v) v.begin(),v.end()
-#define revall(v) v.rbegin(),v.rend()
-#define gcd(a,b) __gcd(a,b)
-#define lcm(a,b) (a*b)/gcd(a,b)
-#define pb push_back
-#define eb emplace_back
-#define mk make_pair
-#define F first
-#define S second
-#define pi acos(-1.0)
-#define maxv(v) *max_element(all(v))
-#define minv(v) *min_element(all(v))
-#define countv(v,a) count(all(v),a)
-#define cntone(x) __builtin_popcountll(x) // number of ones
-#define cntzero(x) __builtin_ctzll(x) // number of trailing zeros
-#define rep(i, l, r) for(long long i = l; i<r; i++)
-#define SUM accumulate
-#define toint(a) atoi(a.c_str())
-#define read freopen("input.txt","r",stdin)
-#define write freopen("output.txt","w",stdout)
-#define Unique(c) (c).resize(unique(all(c))-(c).begin())
-#define sp(a) fixed<<setprecision(a)
-#define printv(container) for(auto it:container) cout << it << " ";cout << endl
-#define vll vector <ll>
-#define vbool vector <bool>
-#define pll pair<ll,ll>
-#define mll map<ll, ll>
-#define vpll vector<pair<ll, ll>>
-#define vvll vector<vector<ll>>
-#define vvch vector<vector<char>>
-#define vvpll vector<vector<pair<ll, ll>>>
-#define vvvll vector<vector<vector<ll>>>
-#define cases(i) cout << "Case " << i << ":"
-#define yes cout << "YES" << endl
-#define no cout << "NO" << endl
-#define rand(V) random_shuffle(all(V))
-#define lb(a,X) lower_bound(all(a),X)-a.begin()
-#define ub(a,X) upper_bound(all(a),X)-a.begin()
-#define Tc ll t=1;cin >> t;while(t--)
-#define for0(i,l,r) for(ll i = l;i<r;i++)
-#define for1(i,l,r) for(ll i = l;i<=r;i++)
-#define rev0(i,r,l) for(ll i = r - 1;i>=l;i--)
-ll N = 100000;
-ll MOD = 1e9+7;
-vector<int> spf(N + 1, 0);
-void smallestPrimeFactor()
-{
-    for (int i = 2; i <= N; i++)
-    {
-        if (!spf[i])
-        {
-            spf[i] = i;
-            for (int j = i * i; j <= N; j += i)
-            {
-                if (!spf[j])
-                    spf[j] = i;
-            }
+
+mt19937 rnd(143);
+
+const int inf = 1e9;
+const int M = 998244353;
+const ld pi = atan2(0, -1);
+const ld eps = 1e-4;
+
+int n, cur;
+vector<vector<pair<int, int>>> sl;
+
+void dfs(int v, vector<bool> &used){
+    used[v] = true;
+    for(auto e: sl[v]){
+        int u = e.x, w = e.y;
+        if(!used[u] && (cur | w) == cur){
+            dfs(u, used);
         }
     }
 }
 
-void dfs(vvpll &adj, ll node, vbool &vis, ll &mask){
-
-    vis[node] = 1;
-    for(auto &it: adj[node]){
-        ll v = it.first;
-        ll w = it.second;
-        if(!vis[v] && (mask|w==mask)){
-            dfs(adj,v,vis,mask);
+void cnt(int pw){
+    if(pw < 0) return;
+    int d = (ll) 1 << pw;
+    cur -= d;
+    vector<bool> used(n);
+    dfs(0, used);
+    for(bool b: used){
+        if(!b) {
+            cur += d;
+            break;
         }
     }
+    cnt(pw - 1);
 }
 
-int main()
-{
-    fastio;
-    Tc
-    {
-        // string empty;
-        // cin>>empty;
-
-        ll n,m;
-        cin>>n>>m;
-
-        vvpll adj(n+1);
-        for0(i,0,m){
-            ll u,v,w;
-            cin>>u>>v>>w;
-            adj[u].pb({v,w});
-            adj[v].pb({u,w});
-        }
-
-        ll mask = pow(2,31) - 1;
-
-        for(ll i=30;i>=0;i--){
-            ll temp = mask&(1<<i);
-            vbool vis(n+1,false);
-            bool isPossible = true;
-            ll cnt = 0;
-            for1(j,1,n){
-                if(!vis[j] && cnt<=1){
-                    dfs(adj,j,vis,temp);
-                    cnt++;
-                }
-                if(cnt>1){
-                    isPossible = false;
-                    break;
-                }
-            }
-            if(isPossible) mask = mask&(1<<i);
-        }
-
-        cout<<mask<<"\n";
-
+void solve() {
+    int m;
+    cin >> n >> m;
+    sl.assign(n, vector<pair<int, int>>(0));
+    for(int i = 0; i < m; ++i){
+        int u, v, w;
+        cin >> u >> v >> w;
+        --u, --v;
+        sl[u].emplace_back(v, w);
+        sl[v].emplace_back(u, w);
     }
+    cur = 1;
+    int bit = 0;
+    for(; cur < inf; bit++){
+        cur = 2 * cur + 1;
+    }
+    cnt(bit);
+    cout << cur;
+}
+
+bool multi = true;
+
+signed main() {
+    int t = 1;
+    if (multi) {
+        cin >> t;
+    }
+    for (; t != 0; --t) {
+        solve();
+        cout << "\n";
+    }
+    return 0;
 }
