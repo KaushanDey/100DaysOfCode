@@ -68,6 +68,7 @@ vll dp;
 ll m;
 vpll ans;
 
+
 void dfs1(ll node, ll par){
 
     dp[node] = 1;
@@ -76,23 +77,32 @@ void dfs1(ll node, ll par){
         dfs1(child,node);
         dp[node] = ((dp[node]%m)*((dp[child]%m)%m))%m;
     }
-    dp[node]+=1;
+    dp[node]= (dp[node]+1)%m;
 }
 
 void dfs2(ll node, ll par){
+    
+    ll n = adj[node].size();
+    vll pre(n+1,1);
+    vll suff(n+2,1);
+    for0(i,0,n){
+        pre[i+1] = ((pre[i]%m)*(dp[adj[node][i]]%m))%m;
+        suff[n-i] = ((suff[n-i+1]%m)*(dp[adj[node][n-i-1]]%m))%m;
+    }
 
     ll t1 = dp[node];
-    for(auto &child: adj[node]){
-        if(child==par) continue;
-        ll t2 = dp[child];
-        dp[node]-=1;
-        dp[node] = (dp[node]/(dp[child]))+1;
-        dp[child]-=1;
-        dp[child] = ((dp[child]%m)*(dp[node]%m))%m;
-        dp[child]+=1;
-        dfs2(child,node);
-        ans.pb({child,(dp[child]-1)%m});
-        dp[child] = t2;
+
+    for0(i,0,n){
+        if(adj[node][i]==par) continue;
+        ll t2 = dp[adj[node][i]];
+        dp[node] = ((pre[i]%m)*(suff[i+2]%m))%m;
+        dp[node] = (dp[node]+1)%m;
+        dp[adj[node][i]] = (dp[adj[node][i]]-1+m)%m;
+        dp[adj[node][i]] = ((dp[adj[node][i]]%m)*(dp[node]%m))%m;
+        dp[adj[node][i]] = (dp[adj[node][i]]+1)%m;
+        dfs2(adj[node][i],node);
+        ans.pb({adj[node][i],(dp[adj[node][i]]-1+m)%m});
+        dp[adj[node][i]] = t2;
         dp[node] = t1;
     }
     
@@ -111,7 +121,7 @@ int main()
     }
     dp.resize(n+1);
     dfs1(1,-1);
-    ans.pb({1,(dp[1]-1)%m});
+    ans.pb({1,(dp[1]-1+m)%m});
     dfs2(1,-1);
     sort(all(ans));
     for0(i,0,ans.size()){
