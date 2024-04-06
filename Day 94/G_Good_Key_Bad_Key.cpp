@@ -72,11 +72,20 @@ int main()
         cin>>n>>k;
         vll a(n);
         for0(i,0,n) cin>>a[i];
-        vll dp(n);
-        vll good(n);
-        good[0] = a[0]-k;
-        for0(i,1,n) {
-            good[i] = good[i-1]+a[i]-k;
+        ll ans = 0;
+        ll good = 0;
+        
+        for0(i,-1,n) {
+            ll curr = good;
+            ll tar = i+32;
+            ll lim = min(n,tar);
+            for1(j,i+1,lim){
+                ll temp = a[j]/(pow(2,j-i));
+                curr+=temp;
+            }
+            ans = max(ans, curr);
+            if(i!=n-1) good+=a[i+1]-k;
         }
+        cout<<ans<<"\n";
     }
 }
