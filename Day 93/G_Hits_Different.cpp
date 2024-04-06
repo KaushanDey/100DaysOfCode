@@ -63,11 +63,33 @@ void smallestPrimeFactor()
         }
     }
 }
+
+ll formula(ll n){
+    return 1+(n*(n-1))/2;
+}
 int main()
 {
     fastio;
+    ll k = 2;
+    vll dp(1e7);
+    dp[1] = 1;
+    for1(i,2,2023){
+        for1(j,1,i){
+            if(j==1){
+                dp[k] = k*k+dp[k-i+1];
+            }else if(j==i){
+                dp[k] = k*k+dp[k-i];
+            }else{
+                dp[k] = k*k+dp[k-i]+dp[k-i+1]-dp[k-2*i+2];
+            }
+            k++;
+        }
+    }
+
     Tc
     {
-        
+        ll n;
+        cin>>n;
+        cout<<dp[n]<<"\n";
     }
 }
